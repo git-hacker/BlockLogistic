@@ -7,7 +7,20 @@ const getOrder = async(req, res) => {
     res.json(orders);
 }
 
+const createOrder = async(req, res) => {
+    const body = req.body;
+    const order = new Order(body);
+    order.save((err, order) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.send(order);
+        }
+    })
+}
+
 router.get('/order', getOrder);
+router.post('/createOrder', createOrder);
 
 module.exports = router;
 

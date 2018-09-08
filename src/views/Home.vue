@@ -54,7 +54,6 @@
       getIsSign() {
           this.$http.get('/api/issign')
               .then(res => {
-                  console.log('res.data.message', res.data.message);
                   if (res.data.message === '已签约') {
                       // 已签约调用货车司机列表
                       this.$router.push({name: 'truck'});

@@ -27,6 +27,7 @@ const Register = (req, res) => {
                     password: body.password,
                     is_sign: 0,
                     userType: body.userType,
+                    scoreCredit: 60,
                 });
                 userRegister.save((err, user) => {
                     if (err) {
