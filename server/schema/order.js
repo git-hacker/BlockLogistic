@@ -9,6 +9,7 @@ const orderSchema = new mongoose.Schema({
     custumerAddr: String,
     transactionHash: String,
     driverName: String,
+    status: Number,
 });
 
 module.exports = mongoose.model('Orders', orderSchema);

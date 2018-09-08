@@ -2,8 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../schema/order');
 const User = require('../schema/user');
-const EventEmitter = require('events').EventEmitter;
-const event = new EventEmitter();
 
 const getOrder = async(req, res) => {
     let orders = await Order.find({ custumerIdCard: req.query.userId });
@@ -20,21 +18,20 @@ const getOrder = async(req, res) => {
             custumerIdCard: order.custumerIdCard,
             custumerAddr: order.custumerAddr,
             transactionHash: order.transactionHash,
+            status: order.status,
             driverName: userOne.name
         };
         orders1.push(order2);
         if ((orders.length - 1) === index) {
-            event.emit('mapEnd', res);
+            res.json(orders1);
         }
-    });
-    event.on('mapEnd', (res) => {
-        res.json(orders1);
     });
 }
 
 const createOrder = async(req, res) => {
     const body = req.body;
     body.driverName = '';
+    body.status = 0;
     const order = new Order(body);
     order.save((err, order) => {
         if (err) {
@@ -45,8 +42,17 @@ const createOrder = async(req, res) => {
     })
 }
 
+const updateOrder = async(req, res) => {
+    console.log('type', typeof req.body.id);
+    const order = await Order.update({ id: req.body.id }, { status: 1 })
+    res.json({
+        message: 'ok',
+    });
+}
+
 router.get('/order', getOrder);
 router.post('/createOrder', createOrder);
+router.post('/updateOrder', updateOrder);
 
 module.exports = router;
 

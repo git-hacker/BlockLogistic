@@ -5,7 +5,7 @@ const ABI = require('../const/logisticABI');
 
 const router = express.Router();
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-const Address = '0xf30826f0a321b5d39b364c8863335d588c7d40ce';
+const Address = '0x02860c7d9d39d9ae0f91f6ac20d11ba92e0200d6';
 const Contract = web3.eth.contract(ABI);
 const contractInstance = Contract.at(Address);
 
@@ -109,7 +109,6 @@ const IsSign = async (req, res) => {
 // 将is_sign更新为1，表示已经签约
 const updateSign = async (req, res) => {
     const user = await User.update({ id: req.body.id }, { is_sign: 1 })
-    console.log('user', user);
     res.json({
         message: '保存成功',
     });

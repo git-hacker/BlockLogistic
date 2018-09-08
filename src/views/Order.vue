@@ -30,9 +30,17 @@
                 width="180">
             </el-table-column>
             <el-table-column
-                label="操作">
+                prop="status"
+                label="订单状态"
+                width="180">
                 <template slot-scope="scope">
-                    <el-button type="text" size="small">确认</el-button>
+                    {{scope.row.status ? '完成' : '未完成'}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="操作">
+                <template slot-scope="scope" v-if="!scope.row.status">
+                    <el-button @click="confirm(scope.row.id)" type="text" size="small">确认</el-button>
                     <el-button type="text" size="small">拒绝</el-button>
                 </template>
             </el-table-column>
@@ -69,7 +77,25 @@
                     }
                 })
             },
-
+            confirm(id) {
+                const onConfirmOrder = window.contractInstance.methods.confirm(id).send({
+                    from: web3.eth.defaultAccount,
+                });
+                onConfirmOrder.then((res) => {
+                    const returnValues = res.events.onConfirmOrder.returnValues;
+                    console.log('returnValues', returnValues);
+                    if (returnValues.orderId) {
+                        this.$http.post('/api/updateOrder', { id: returnValues.orderId})
+                            .then((res) => {
+                                console.log('res===', res);
+                                if (res.data.message === 'ok') {
+                                    this.$message.success('订单完成');
+                                    this.getOrder();
+                                }
+                            })
+                    }
+                });
+            },
         },
     }
 </script>
