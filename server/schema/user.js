@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema({
     is_sign: Number,
     userType: Number,
     scoreCredit: Number,
+    // user: { type: Schema.Types.ObjectId, ref: '_user' }
 });
 
 module.exports = mongoose.model('UserSession', userSchema);

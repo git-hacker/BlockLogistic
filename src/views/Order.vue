@@ -10,13 +10,23 @@
                 width="180">
             </el-table-column>
             <el-table-column
-                prop="distance"
-                label="路程"
+                prop="driverName"
+                label="司机姓名"
                 width="180">
             </el-table-column>
             <el-table-column
-                prop="price"
+                prop="eth"
                 label="费用"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="transactionHash"
+                label="事件id"
+                width="180">
+            </el-table-column>
+            <el-table-column
+                prop="userName"
+                label="货主姓名"
                 width="180">
             </el-table-column>
             <el-table-column
@@ -33,13 +43,7 @@
     export default {
         data() {
             return {
-                tableData: [
-                    {
-                        id: 'xxx',
-                        distance: '成都-北京',
-                        price: '23eth',
-                    }
-                ]
+                tableData: [],
             }
         },
         created() {
@@ -47,6 +51,7 @@
         },
         methods: {
             getOrder() {
+                const userName = window.localStorage.getItem('userName');
                 const userId = window.localStorage.getItem('id');
                 this.$http.get('/api/order', {
                     params: {
@@ -54,9 +59,11 @@
                     }
                 })
                 .then((res) => {
-                    console.log('res====', res);
                     if (res.status === 200) {
-                        this.tableData = res.data;
+                        this.tableData = res.data.map((data) => {
+                            data.userName = userName;
+                            return data;
+                        });
                     } else {
                         this.$message.error('请求出错');
                     }

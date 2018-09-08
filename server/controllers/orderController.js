@@ -8,9 +8,7 @@ const event = new EventEmitter();
 const getOrder = async(req, res) => {
     let orders = await Order.find({ custumerIdCard: req.query.userId });
     let orders1 = [];
-    event.on('mapEnd', () => {
-        res.send(orders1);
-    });
+
     orders.map(async (order, index) => {
         let order2 = {};
         const userOne = await User.findOne({ id: order.driverIdCard});
@@ -25,18 +23,13 @@ const getOrder = async(req, res) => {
             driverName: userOne.name
         };
         orders1.push(order2);
-
         if ((orders.length - 1) === index) {
-            console.log('')
-            event.emit('mapEnd');
+            event.emit('mapEnd', res);
         }
-        // console.log('userOne._doc', userOne._doc);
-        // order2 = Object.assign(order2, userOne._doc);
-        //  console.log('order2', order2);
-        // order.driverName = userOne.name;
-        //  console.log('orders1', orders1);
     });
-
+    event.on('mapEnd', (res) => {
+        res.json(orders1);
+    });
 }
 
 const createOrder = async(req, res) => {
