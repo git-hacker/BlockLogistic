@@ -8,6 +8,7 @@ const orderSchema = new mongoose.Schema({
     custumerIdCard: Number,
     custumerAddr: String,
     transactionHash: String,
+    driverName: String,
 });
 
 module.exports = mongoose.model('Orders', orderSchema);

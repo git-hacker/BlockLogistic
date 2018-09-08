@@ -48,13 +48,13 @@
         methods: {
             getOrder() {
                 const userId = window.localStorage.getItem('id');
-                console.log('userId', userId);
                 this.$http.get('/api/order', {
                     params: {
                         userId,
                     }
                 })
                 .then((res) => {
+                    console.log('res====', res);
                     if (res.status === 200) {
                         this.tableData = res.data;
                     } else {
