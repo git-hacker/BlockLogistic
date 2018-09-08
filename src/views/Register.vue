@@ -1,5 +1,9 @@
 <template>
   <div class="box-card">
+    <div class="type-select">
+      <el-radio v-model="userType" label="1">货主</el-radio>
+      <el-radio v-model="userType" label="2">司机</el-radio>
+    </div>
     <el-row type="flex" justify="center">
       <el-col :span="12">
         <el-form
@@ -84,7 +88,8 @@
           checkPassword:[
             {validator:checkPasswordAgain,trigger: 'blur'}
           ],
-        }
+        },
+        userType: '1',
       }
     },
     methods:{
@@ -94,14 +99,14 @@
         let formData = {
           name: user.name,
           id: user.id,
-          password: user.password
+          password: user.password,
+          userType: parseInt(this.userType)
         };
         // 表单验证
         this.$refs['formRegister'].validate((valid)=>{
           if(valid){
             this.$http.post('/api/register',formData)
             .then(res => {
-              console.dir(res.data)
               if (res.data.error) {
                 this.$message.error(res.data.error);
                 return false;
@@ -124,5 +129,8 @@
 <style>
   .box-card {
     padding: 50px 0;
+  }
+  .type-select {
+    margin-bottom: 20px;
   }
 </style>
