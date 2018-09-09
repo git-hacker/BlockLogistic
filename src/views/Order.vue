@@ -61,7 +61,7 @@
                 label="操作">
                 <template slot-scope="scope" v-if="!scope.row.status">
                     <el-button @click="confirm(scope.row.id)" type="text" size="small">确认</el-button>
-                    <el-button type="text" size="small">拒绝</el-button>
+                    <el-button @click="unconfirm(scope.row.id)" type="text" size="small">拒绝</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -104,10 +104,27 @@
                 onConfirmOrder.then((res) => {
                     const returnValues = res.events.onConfirmOrder.returnValues;
                     if (returnValues.orderId) {
-                        this.$http.post('/api/updateOrder', { id: returnValues.orderId})
+                        this.$http.post('/api/updateOrder', { id: returnValues.orderId, status: 1 })
                             .then((res) => {
                                 if (res.data.message === 'ok') {
                                     this.$message.success('订单完成');
+                                    this.getOrder();
+                                }
+                            })
+                    }
+                });
+            },
+            unconfirm(id) {
+                const onConfirmOrder = window.contractInstance.methods.unconfirm(id).send({
+                    from: web3.eth.defaultAccount,
+                });
+                onConfirmOrder.then((res) => {
+                    const returnValues = res.events.onConfirmOrder.returnValues;
+                    if (returnValues.orderId) {
+                        this.$http.post('/api/updateOrder', { id: returnValues.orderId, status: 2 })
+                            .then((res) => {
+                                if (res.data.message === 'ok') {
+                                    this.$message.success('货主已拒绝订单');
                                     this.getOrder();
                                 }
                             })

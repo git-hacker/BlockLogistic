@@ -47,13 +47,18 @@ const createOrder = async(req, res) => {
 }
 
 const updateOrder = async(req, res) => {
-    const order = await Order.findOneAndUpdate({ id: req.body.id }, { status: 1 });
+    const order = await Order.findOneAndUpdate({ id: req.body.id }, { status: req.body.status });
     const user  = await User.findOne({ id:order.driverIdCard });
-    await User.update({ id:order.driverIdCard },{scoreCredit: user.scoreCredit+1 });
+    if(req.body.status == 1){
+        await User.update({ id:order.driverIdCard },{scoreCredit: user.scoreCredit+1 });
+    }else {
+        await User.update({ id:order.driverIdCard },{scoreCredit: user.scoreCredit-1 });
+    }
     res.json({
         message: 'ok',
     });
 }
+
 
 const createETC = async(req, res) => {
     const body = req.body
