@@ -52,6 +52,12 @@
                 </template>
             </el-table-column>
             <el-table-column
+                label="理赔">
+                <template slot-scope="scope">
+                    <el-button @click="compensate(scope.row.id)" type="text" size="small">理赔</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column
                 label="操作">
                 <template slot-scope="scope" v-if="!scope.row.status">
                     <el-button @click="confirm(scope.row.id)" type="text" size="small">确认</el-button>
@@ -124,6 +130,27 @@
                         .then((res) => {
                             if (res.status === 200) {
                                 this.$message.success('ETC扣除成功');
+                            }
+                        })
+                });
+            },
+            compensate(id) {
+                const compensate = window.safeContract.methods.compensate(id).send({
+                    from: web3.eth.defaultAccount,
+                    value: 0.0001 * 1e18,
+                });
+                compensate.then((res) => {
+                    const returnData = res.events.onCompensateOrder.returnValues;
+                    const formData = {
+                        customerAddr: returnData.customerAddr,
+                        id: returnData.id,
+                        logisticOrderId: returnData.logisticOrderId,
+                        payIfFail: returnData.payIfFail
+                    };
+                    this.$http.post('/api/payIfFail', formData)
+                        .then((res) => {
+                            if (res.status === 200) {
+                                this.$message.success('理赔成功!');
                             }
                         })
                 });

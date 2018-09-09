@@ -173,6 +173,23 @@
                                 console.log('etc数据保存成功');
                             })
                     });
+                    window.safeContract.getPastEvents('onCreateOrder', (err, event) => {
+                        const returnValue = event[0].returnValues;
+                        const formData = {
+                            customerAddr: returnValue.customerAddr,
+                            customerIdCard: returnValue.customerIdCard,
+                            eth: returnValue.eth,
+                            goods: returnValue.goods,
+                            id: returnValue.id,
+                            logisticOrderId: returnValue.logisticOrderId,
+                            payIfFail: returnValue.payIfFail
+                        };
+                        this.$http.post('/api/createSafe', formData)
+                            .then((res) => {
+                                console.log('保险数据保存成功');
+                            })
+
+                    });
 
                     const returnData = res.events.onCreateOrder.returnValues;
                     const formData = {

@@ -4,6 +4,8 @@ const Order = require('../schema/order');
 const User = require('../schema/user');
 const ETC = require('../schema/etc');
 const Reduce = require('../schema/reduce');
+const Safe = require('../schema/safe');
+const Pay = require('../schema/pay');
 
 const getOrder = async(req, res) => {
     let orders = await Order.find({ custumerIdCard: req.query.userId });
@@ -84,8 +86,38 @@ const reduceOrder = async(req, res) => {
 const getDetail = async(req, res) => {
     const data = {};
     const reduceData = await Reduce.find({ id: req.query.id});
+    const orderData = await Order.findOne({ id: req.query.id});
+    const safe = await Safe.findOne({logisticOrderId: req.query.id});
+    const pay = await Pay.findOne({logisticOrderId: req.query.id})
     data.reduce = reduceData;
+    data.detail = orderData;
+    data.safe = safe;
+    data.pay = pay;
     res.json(data)
+}
+
+const createSafe = async(req, res) => {
+    const body = req.body;
+    const safe = new Safe(body);
+    safe.save((err, data) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(data);
+        }
+    })
+}
+
+const payIfFail = async(req, res) => {
+    const body = req.body;
+    const pay = new Pay(body);
+    pay.save((err, data) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(data);
+        }
+    });
 }
 
 router.get('/order', getOrder);
@@ -94,6 +126,8 @@ router.post('/updateOrder', updateOrder);
 router.post('/createETC', createETC);
 router.post('/reduceOrder', reduceOrder);
 router.get('/orderDetail', getDetail);
+router.post('/createSafe', createSafe);
+router.post('/payIfFail', payIfFail);
 
 module.exports = router;
 
