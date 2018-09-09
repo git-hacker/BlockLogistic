@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-            <p>ETC扣费</p>
+            <p>ETC扣费明细</p>
             <el-table
                 border
                 :data="reduceData"
@@ -17,10 +17,6 @@
                 <el-table-column
                     prop="eth"
                     label="ETC扣费">
-                </el-table-column>
-                <el-table-column
-                    prop="etcAddr"
-                    label="ETC地址">
                 </el-table-column>
                 <el-table-column
                     prop="transactionHash"
