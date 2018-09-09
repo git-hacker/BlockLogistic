@@ -83,7 +83,6 @@
             this.$http.post('/api/login',formData)
                 .then(res => {
                     if (res.data.success) {
-                      console.log('res--', res.data);
                       this.userLogin(res.data);
                       this.$message.success(`${res.data.message}`)
                       // 用户id存于localstorage中

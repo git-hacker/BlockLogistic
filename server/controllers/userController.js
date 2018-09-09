@@ -5,7 +5,7 @@ const ABI = require('../const/logisticABI');
 
 const router = express.Router();
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-const Address = '0x418e832cc06cce78de6953181c2feb2945d4e4b2';
+const Address = '0x6dd053cc650d0288492289e445ef5072177fef76';
 const Contract = web3.eth.contract(ABI);
 const contractInstance = Contract.at(Address);
 

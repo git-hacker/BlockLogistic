@@ -9,6 +9,7 @@ import Login from '@/views/Login';
 import Register from '@/views/Register';
 import Sign from '@/views/Sign';
 import SignSucces from '@/views/SignSucces';
+import orderDetai from '@/views/orderDetai';
 
 Vue.use(Router)
 
@@ -52,6 +53,11 @@ const router = new Router({
                     path: 'signsucces',
                     name: 'signsucces',
                     component: SignSucces,
+                },
+                {
+                    path: 'orderDetai',
+                    name: 'orderDetai',
+                    component: orderDetai,
                 }
             ]
         },

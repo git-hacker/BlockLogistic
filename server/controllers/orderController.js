@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const Order = require('../schema/order');
 const User = require('../schema/user');
+const ETC = require('../schema/etc');
+const Reduce = require('../schema/reduce');
 
 const getOrder = async(req, res) => {
     let orders = await Order.find({ custumerIdCard: req.query.userId });
@@ -55,9 +57,43 @@ const updateOrder = async(req, res) => {
     // });
 }
 
+const createETC = async(req, res) => {
+    const body = req.body
+    const etc = new ETC(body);
+    etc.save((err, data) => {
+        if (err) {
+            res.send(err);
+        } else {
+            res.json(data);
+        }
+    })
+}
+
+const reduceOrder = async(req, res) => {
+    const body = req.body;
+    const reduce = new Reduce(body);
+    reduce.save((err, data) => {
+       if (err) {
+            res.send(err);
+       } else {
+            res.json(data);
+       }
+    });
+}
+
+const getDetail = async(req, res) => {
+    const data = {};
+    const reduceData = await Reduce.find({ id: req.query.id});
+    data.reduce = reduceData;
+    res.json(data)
+}
+
 router.get('/order', getOrder);
 router.post('/createOrder', createOrder);
 router.post('/updateOrder', updateOrder);
+router.post('/createETC', createETC);
+router.post('/reduceOrder', reduceOrder);
+router.get('/orderDetail', getDetail);
 
 module.exports = router;
 

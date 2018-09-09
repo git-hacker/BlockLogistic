@@ -14,13 +14,15 @@ Vue.use(Element);
 
 import './web3.js';
 const ABI = require('./const/logisticABI');
-
-const Address = '0x418e832cc06cce78de6953181c2feb2945d4e4b2';
+const ETCABI = require('./const/etcABI');
+const Address = '0x6dd053cc650d0288492289e445ef5072177fef76';
+const etcAddress = '0xb19ac2fc81d8fa369ed6389060446bb7c3e6d023';
 
 let web3js = null;
 if (typeof web3 !== 'undefined') {
     web3js = new Web3(web3.currentProvider);
     window.contractInstance = new web3js.eth.Contract(ABI, Address);
+    window.etcContract = new web3js.eth.Contract(ETCABI, etcAddress);
 } else {
     console.log('Please install the metaMask.');
 }

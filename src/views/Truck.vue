@@ -124,7 +124,7 @@
                 },
                 price: 0,
                 driverData: null,
-                distance: 200, // 此处在路演时距离固定为200公里
+                distance: 2000, // 此处在路演时距离固定为200公里
             }
         },
         created() {
@@ -151,13 +151,29 @@
                 const driverData = this.driverData;
                 const userIdCard = window.localStorage.getItem('id');
                 const sum = this.distance * this.unitETC + this.ruleForm.price / 1000 * this.insurance + this.distance * this.unitDriver;
+                const etcSum = this.distance * this.unitETC;
+                // 物流合约
                 const onCreateOrderEvent = window.contractInstance.methods.corePay(this.distance, userIdCard, driverData.id, this.ruleForm.goods, this.ruleForm.price).send({
                     from: web3.eth.defaultAccount,
                     value: sum * 1e18,
                 })
                 this.dialogVisible = false;
                 this.clearData();
+                // 创建order
                 onCreateOrderEvent.then((res) => {
+                    window.etcContract.getPastEvents('onCreateETCOrder', (err, event) => {
+                        const returnValue = event[0].returnValues;
+                        const formData = {
+                            customerAddr: returnValue.returnValue,
+                            eth: returnValue.eth / 1e18,
+                            id: returnValue.logisticOrderId
+                        }
+                        this.$http.post('/api/createETC', formData)
+                            .then((res) => {
+                                console.log('etc数据保存成功');
+                            })
+                    });
+
                     const returnData = res.events.onCreateOrder.returnValues;
                     const formData = {
                         id: returnData.id,
@@ -168,6 +184,7 @@
                         custumerAddr: returnData.custumerAddr,
                         transactionHash: res.events.onCreateOrder.transactionHash,
                     };
+
                     this.$http.post('/api/createOrder', formData)
                         .then((res) => {
                             if (res.status === 200) {
