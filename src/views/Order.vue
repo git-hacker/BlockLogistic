@@ -15,6 +15,11 @@
                 width="180">
             </el-table-column>
             <el-table-column
+                prop="userName"
+                label="货主姓名"
+                width="180">
+            </el-table-column>
+            <el-table-column
                 prop="eth"
                 label="费用"
                 width="180">
@@ -25,16 +30,25 @@
                 width="180">
             </el-table-column>
             <el-table-column
-                prop="userName"
-                label="货主姓名"
-                width="180">
-            </el-table-column>
-            <el-table-column
                 prop="status"
                 label="订单状态"
                 width="180">
                 <template slot-scope="scope">
                     {{scope.row.status ? '完成' : '未完成'}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                prop="detail"
+                label="详情"
+                width="180">
+                <template slot-scope="scope">
+                    <el-button @click="$router.push({ name: 'orderDetai', query: {id: scope.row.id}})" type="text" size="small">详情</el-button>
+                </template>
+            </el-table-column>
+            <el-table-column
+                label="模拟ETC">
+                <template slot-scope="scope">
+                    <el-button @click="reduce(scope.row.id)" type="text" size="small">扣除ETC</el-button>
                 </template>
             </el-table-column>
             <el-table-column
@@ -94,6 +108,26 @@
                     }
                 });
             },
+            reduce(id) {
+                const reduce = window.etcContract.methods.reduce(id).send({
+                    from: web3.eth.defaultAccount,
+                });
+                reduce.then((res) => {
+                    const returnData = res.events.onExcuteETCOnce.returnValues;
+                    const fromData = {
+                        id: returnData.logisticOrderId,
+                        etcAddr: returnData.etcAddr,
+                        eth: returnData.eth / 1e18,
+                        transactionHash: res.events.onExcuteETCOnce.transactionHash
+                    }
+                    this.$http.post('/api/reduceOrder', fromData)
+                        .then((res) => {
+                            if (res.status === 200) {
+                                this.$message.success('ETC扣除成功');
+                            }
+                        })
+                });
+            }
         },
     }
 </script>

@@ -4,10 +4,10 @@ const User = require('../schema/user');
 const ABI = require('../const/logisticABI');
 
 const router = express.Router();
-//const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 const web3 = new Web3(new Web3.providers.HttpProvider("https://ropsten.infura.io/v3/f329bd0acda54b87875860bdba06515a"));
 const Address = '0xa29be289dDcE36B10dc50748cfCBD52FbDa851e4';
+
 const Contract = web3.eth.contract(ABI);
 const contractInstance = Contract.at(Address);
 

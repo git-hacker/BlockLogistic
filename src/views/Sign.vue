@@ -20,11 +20,12 @@
                 const name = window.localStorage.getItem('userName');
                 const idCard = window.localStorage.getItem('userid');
                 const userType = window.localStorage.getItem('userType');
-                console.log('userType', userType);
                 // 首先签约合约，然后更新数据库
+                // 物流合约
                 let signEvent = window.contractInstance.methods.sign(name, idCard, userType).send({
                     from: web3.eth.defaultAccount
                 })
+
                 signEvent.then((res) => {
                     const id = res.events.onSign.returnValues.idCard;
                     const formData = { id };
