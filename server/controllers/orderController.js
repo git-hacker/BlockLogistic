@@ -43,11 +43,16 @@ const createOrder = async(req, res) => {
 }
 
 const updateOrder = async(req, res) => {
-    console.log('type', typeof req.body.id);
-    const order = await Order.update({ id: req.body.id }, { status: 1 })
-    res.json({
-        message: 'ok',
-    });
+    const order = () => Order.update({ id: req.body.id }, { status: 1 });
+    const user = () => User.findOne({ id: req.body.driverIdCard });
+
+    Promise.all([order, user])
+        .then((res) => {
+            console.log('res===', res);
+        })
+    // res.json({
+    //     message: 'ok',
+    // });
 }
 
 router.get('/order', getOrder);

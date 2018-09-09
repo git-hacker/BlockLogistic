@@ -83,11 +83,9 @@
                 });
                 onConfirmOrder.then((res) => {
                     const returnValues = res.events.onConfirmOrder.returnValues;
-                    console.log('returnValues', returnValues);
                     if (returnValues.orderId) {
                         this.$http.post('/api/updateOrder', { id: returnValues.orderId})
                             .then((res) => {
-                                console.log('res===', res);
                                 if (res.data.message === 'ok') {
                                     this.$message.success('订单完成');
                                     this.getOrder();

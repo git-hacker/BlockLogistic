@@ -19,7 +19,8 @@
             sign() {
                 const name = window.localStorage.getItem('userName');
                 const idCard = window.localStorage.getItem('userid');
-                const userType = 1;
+                const userType = window.localStorage.getItem('userType');
+                console.log('userType', userType);
                 // 首先签约合约，然后更新数据库
                 let signEvent = window.contractInstance.methods.sign(name, idCard, userType).send({
                     from: web3.eth.defaultAccount
@@ -30,7 +31,11 @@
                     this.$http.post('/api/updateSign', formData)
                         .then((res) => {
                             if (res.data.message === '保存成功') {
-                                this.$router.push({name: 'truck'});
+                                if (userType == 1) {
+                                    this.$router.push({name: 'truck'});
+                                } else {
+                                    this.$router.push({name: 'signsucces'});
+                                }
                             }
                         })
                 });

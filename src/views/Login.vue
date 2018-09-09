@@ -9,8 +9,8 @@
           :rules="rules"
           ref="formLogin">
           <!-- $refs 只在组件渲染完成后才填充，并且它是非响应式的。它仅仅作为一个直接访问子组件的应急方案——应当避免在模版或计算属性中使用 $refs 。 -->
-          <el-form-item label="身份证号" prop="id">
-            <el-input v-model="formLogin.id"></el-input>
+          <el-form-item label="用户名" prop="name">
+            <el-input v-model="formLogin.name"></el-input>
           </el-form-item>
           <el-form-item label="密码" prop="password">
             <el-input v-model="formLogin.password"></el-input>
@@ -53,8 +53,8 @@
          }
       }
       return{
-        formLogin:{
-          id: '',
+        formLogin: {
+          name: '',
           password: '',
         },
         rules:{
@@ -73,7 +73,7 @@
       login(){
         let user = this.formLogin;
         let formData = {
-          id: user.id,
+          name: user.name,
           password: user.password
         };
         // 表单验证
@@ -83,11 +83,13 @@
             this.$http.post('/api/login',formData)
                 .then(res => {
                     if (res.data.success) {
+                      console.log('res--', res.data);
                       this.userLogin(res.data);
                       this.$message.success(`${res.data.message}`)
                       // 用户id存于localstorage中
                       window.localStorage.setItem('userid', res.data.id);
                       window.localStorage.setItem('userName', res.data.name);
+                      window.localStorage.setItem('userType', res.data.userType);
                       // 登录成功 跳转至首页
                       this.$router.push('/home');
                     }else{

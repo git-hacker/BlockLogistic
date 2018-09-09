@@ -5,7 +5,7 @@ const ABI = require('../const/logisticABI');
 
 const router = express.Router();
 const web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
-const Address = '0x02860c7d9d39d9ae0f91f6ac20d11ba92e0200d6';
+const Address = '0x418e832cc06cce78de6953181c2feb2945d4e4b2';
 const Contract = web3.eth.contract(ABI);
 const contractInstance = Contract.at(Address);
 
@@ -44,7 +44,7 @@ const Register = (req, res) => {
 }
 
 const Login = (req, res) => {
-    User.findOne({ id: req.body.id })
+    User.findOne({ name: req.body.name })
         .then((resUser) => {
             if (!resUser) {
                 res.send({
@@ -58,6 +58,7 @@ const Login = (req, res) => {
                     message: "登录成功",
                     id: resUser.id,
                     name: resUser.name,
+                    userType: resUser.userType,
                 });
             } else {
                 res.json({
