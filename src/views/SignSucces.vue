@@ -1,6 +1,6 @@
 <template>
     <div class="sign-success-box">
-        签约成功，请等待签约...
+        签约成功，请等待接单...
     </div>
 </template>
 <style>

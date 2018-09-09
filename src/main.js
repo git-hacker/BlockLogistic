@@ -16,9 +16,9 @@ import './web3.js';
 const ABI = require('./const/logisticABI');
 const ETCABI = require('./const/etcABI');
 const SafeABI = require('./const/saveABI');
-const Address = '0x6dd053cc650d0288492289e445ef5072177fef76';
-const etcAddress = '0xb19ac2fc81d8fa369ed6389060446bb7c3e6d023';
-const safeAddress = '0xfe9bd7b15c4107a89aeb4fc6bb1f7a29c686f2ac';
+const safeAddress = '0xA99Da1f05B1639Bd682B8d2f7C25256AC1a988c9';
+const Address = '0xa29be289dDcE36B10dc50748cfCBD52FbDa851e4';
+const etcAddress = '0x6E373E2658552d8C022c979026353bd2729476f3';
 
 let web3js = null;
 if (typeof web3 !== 'undefined') {

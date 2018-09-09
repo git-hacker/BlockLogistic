@@ -110,7 +110,7 @@
                 </el-table-column>
                 <el-table-column
                     prop="transactionHash"
-                    label="事物ID">
+                    label="事件ID">
                 </el-table-column>
             </el-table>
         </div>
